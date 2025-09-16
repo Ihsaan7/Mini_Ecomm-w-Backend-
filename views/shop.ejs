@@ -47,116 +47,26 @@
       <!-- Product Grid -->
       <div class="grid grid-cols-4 gap-6">
         <!-- Product Card 1 -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <div class="h-48 bg-yellow-500"></div>
-          <div class="bg-red-400 text-white p-3 flex justify-between items-center">
-            <div>
-              <h3 class="font-medium">Clinge Bag</h3>
-              <p class="text-sm">₹ 1200</p>
-            </div>
-            <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-              +
-            </button>
-          </div>
-        </div>
+       <% productData.forEach(product => { %>
+  <div class="bg-white rounded-lg overflow-hidden shadow-sm">
+    <img 
+      src="data:image/jpeg;base64,<%= product.image.toString("base64")%>" 
+      alt="<%= product.name %>" 
+      class="h-48 w-full object-cover"
+    />
+    <div class="bg-[<%= product.panelColor %>] text-[<%= product.textColor%>] p-3 flex justify-between items-center">
+      <div>
+        <h3 class="font-medium"><%= product.name %></h3>
+        <p class="text-sm">Rs. <%= product.price %></p>
+      </div>
+      <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
+        +
+      </button>
+    </div>
+  </div>
+<% }) %>
 
-        <!-- Product Card 2 -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <div class="h-48 bg-yellow-500"></div>
-          <div class="bg-red-400 text-white p-3 flex justify-between items-center">
-            <div>
-              <h3 class="font-medium">Clinge Bag</h3>
-              <p class="text-sm">₹ 1200</p>
-            </div>
-            <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-              +
-            </button>
-          </div>
-        </div>
 
-        <!-- Product Card 3 -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <div class="h-48 bg-yellow-500"></div>
-          <div class="bg-red-400 text-white p-3 flex justify-between items-center">
-            <div>
-              <h3 class="font-medium">Clinge Bag</h3>
-              <p class="text-sm">₹ 1200</p>
-            </div>
-            <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- Product Card 4 -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <div class="h-48 bg-yellow-500"></div>
-          <div class="bg-red-400 text-white p-3 flex justify-between items-center">
-            <div>
-              <h3 class="font-medium">Clinge Bag</h3>
-              <p class="text-sm">₹ 1200</p>
-            </div>
-            <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- Product Card 5 -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <div class="h-48 bg-yellow-500"></div>
-          <div class="bg-red-400 text-white p-3 flex justify-between items-center">
-            <div>
-              <h3 class="font-medium">Clinge Bag</h3>
-              <p class="text-sm">₹ 1200</p>
-            </div>
-            <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- Product Card 6 -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <div class="h-48 bg-yellow-500"></div>
-          <div class="bg-red-400 text-white p-3 flex justify-between items-center">
-            <div>
-              <h3 class="font-medium">Clinge Bag</h3>
-              <p class="text-sm">₹ 1200</p>
-            </div>
-            <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- Product Card 7 -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <div class="h-48 bg-yellow-500"></div>
-          <div class="bg-red-400 text-white p-3 flex justify-between items-center">
-            <div>
-              <h3 class="font-medium">Clinge Bag</h3>
-              <p class="text-sm">₹ 1200</p>
-            </div>
-            <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-              +
-            </button>
-          </div>
-        </div>
-
-        <!-- Product Card 8 -->
-        <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-          <div class="h-48 bg-yellow-500"></div>
-          <div class="bg-red-400 text-white p-3 flex justify-between items-center">
-            <div>
-              <h3 class="font-medium">Clinge Bag</h3>
-              <p class="text-sm">₹ 1200</p>
-            </div>
-            <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-              +
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   </div>

@@ -2,15 +2,26 @@ const express = require("express")
 const debug = require("debug")("mini-ecommerce:product")
 const router = express.Router()
 const upload = require("../config/multerConfig")
+const productModel = require("../models/product")
 
-// router.get("/",(req,res)=>
-//     {
-//         debug("Product route accessed")
-//         res.send("hey its Working - Product Route")
-//     })
-router.post("/create", upload.single("image") ,(req,res)=>
+
+router.post("/create", upload.single("image") ,async (req,res)=>
     {
-       res.send(req.file)
+        
+     try{   const {name , price  , discount , bgColor , panelColor,textColor} = req.body
+
+        let product =await productModel.create({
+            image: req.file.buffer,
+            name,
+            price,
+            discount,
+            bgColor,
+            panelColor,
+            textColor
+        })
+        req.flash("Success", " Prodcut Created!")
+        res.redirect("/owners")
+    }catch(err){res.send(err.message)}
     })
 
 module.exports = router

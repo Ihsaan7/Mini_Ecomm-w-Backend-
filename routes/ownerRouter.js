@@ -7,7 +7,8 @@ const router = express.Router()
 
 router.get("/",(req,res)=>
     {
-         res.render("productCreate")
+         let flash = req.flash("Success")
+         res.render("productCreate",{flash})
     })
 
 module.exports = router

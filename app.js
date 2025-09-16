@@ -11,6 +11,7 @@ const debug = require("debug")("mini-ecommerce:app")
 const ownerRouter =require("./routes/ownerRouter")
 const userRouter =require("./routes/userRouter")
 const productRouter =require("./routes/productRouter")
+const indexRouter = require("./routes/index")
 const expSession = require("express-session")
 const flash = require("connect-flash")
 
@@ -42,6 +43,7 @@ app.get("/", (req, res) => {
 })
 
 app.use("/users" , userRouter)
+app.use("/index" , indexRouter)
 app.use("/owners" , ownerRouter)
 app.use("/products" , productRouter)
 
