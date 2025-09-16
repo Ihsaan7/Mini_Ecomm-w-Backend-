@@ -9,7 +9,7 @@
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
   <div class="w-full max-w-sm p-6 bg-white rounded-lg shadow-md">
     <h2 class="text-2xl font-bold text-center mb-6">📝 Sign Up</h2>
-    <form action="/register" method="POST" class="space-y-4">
+    <form action="/users/register" method="POST" class="space-y-4">
       <div>
         <label class="block text-sm font-medium text-gray-700">Username</label>
         <input type="text" name="username" required class="mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-green-500" />
@@ -25,7 +25,7 @@
       <button type="submit" class="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition">Sign Up</button>
     </form>
     <p class="mt-4 text-center text-sm text-gray-600">
-      Already have an account? <a href="/login" class="text-green-600 hover:underline">Login</a>
+      Already have an account? <a href="/users/login" class="text-green-600 hover:underline">Login</a>
     </p>
   </div>
 </body>
