@@ -6,11 +6,17 @@ const {loginUser} = require("../controllers/authController")
 
 router.get("/",(req,res)=>
     {
-        debug("User route accessed")
-        res.send("hey its Working - User Route")
+        res.render("signup")
     })
 router.post("/register" , registerUser );
 
+router.get("/login",(req,res)=>{
+    res.render("login")
+})
 router.post("/login" , loginUser )
 
+router.get("/shop",(req,res)=>
+    {
+        res.render("shop")
+    })
 module.exports = router

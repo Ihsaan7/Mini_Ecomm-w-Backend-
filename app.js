@@ -35,8 +35,8 @@ app.use(cookieParser())
 app.use(express.static(path.join(__dirname , "public")))
 
 
-app.use("/owners" , ownerRouter)
 app.use("/users" , userRouter)
+app.use("/owners" , ownerRouter)
 app.use("/products" , productRouter)
 
 
