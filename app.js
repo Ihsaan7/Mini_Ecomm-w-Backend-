@@ -9,6 +9,9 @@ const debug = require("debug")("mini-ecommerce:app")
 const ownerRouter =require("./routes/ownerRouter")
 const userRouter =require("./routes/userRouter")
 const productRouter =require("./routes/productRouter")
+const expSession = require("express-session")
+const flash = require("connect-flash")
+
 
 const db = require("./config/dbConfig")
 
@@ -17,7 +20,14 @@ app.use((req, res, next) => {
     debug(`${req.method} ${req.url} - ${new Date().toISOString()}`)
     next()
 })
-
+app.use(
+    expSession({
+    resave:false,
+    saveUninitialized:false,
+    secret:process.env.EXPRESS_SESSION,
+}) 
+);
+app.use(flash())
 app.set("view engine", "ejs" )
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
