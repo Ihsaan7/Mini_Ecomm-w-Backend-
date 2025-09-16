@@ -1,3 +1,5 @@
+
+
 // Load environment variables from .env file
 require('dotenv').config()
 
@@ -34,6 +36,10 @@ app.use(express.urlencoded({extended:true}))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname , "public")))
 
+// Root route
+app.get("/", (req, res) => {
+    res.redirect("/users")
+})
 
 app.use("/users" , userRouter)
 app.use("/owners" , ownerRouter)

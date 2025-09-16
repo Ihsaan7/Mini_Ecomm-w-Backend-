@@ -7,8 +7,7 @@ const router = express.Router()
 
 router.get("/",(req,res)=>
     {
-        debug("Owner route accessed")
-        res.send("hey its Working - Owner Route")
+         res.render("productCreate")
     })
 
 module.exports = router
