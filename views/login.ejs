@@ -1,28 +1,20 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Login</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div class="w-full max-w-sm p-6 bg-white rounded-lg shadow-md">
-    <h2 class="text-2xl font-bold text-center mb-6">🔐 Login</h2>
-    <form action="/users/login" method="POST" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Username</label>
-        <input type="text" name="username" required class="mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium text-gray-700">Password</label>
-        <input type="password" name="password" required class="mt-1 w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
-      </div>
-      <button type="submit" class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">Login</button>
-    </form>
-    <p class="mt-4 text-center text-sm text-gray-600">
-      Don't have an account? <a href="/signup" class="text-blue-600 hover:underline">Sign up</a>
-    </p>
-  </div>
-</body>
+<%- include('./partials/header') %>
+
+<div class="w-full flex items-center justify-center h-screen flex px-20">
+   <div class="w-1/2 flex items-center justify-center h-screen">
+                    <div class="w-full px-32">
+                        <h4 class="text-2xl capitalize mb-5">login your account</h4>
+                        <form autocomplete="off" action="/users/login" method="post">
+                            <input
+                                class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200"
+                                type="email" placeholder="Email" name="email">
+                            <input
+                                class="block bg-zinc-100 w-full px-3 py-2 border-[1px] rounded-md mb-3 border-zinc-200"
+                                type="password" placeholder="Password" name="password">
+                            <input class="px-5 block  py-3 mt-2 bg-blue-500 text-white" type="submit"
+                                value="Login">
+                        </form>
+                    </div>
+                </div>
+    </div>
 </html>

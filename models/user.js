@@ -12,10 +12,12 @@ const userSchema = mongoose.Schema({
         minLength:3,
         trim:true
     },
-    cart:{
-        type:Array,
-        default:[],
-    },
+    cart:[
+        {
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"product"
+        }
+    ],
     order:{
         type:Array,
         default:[]

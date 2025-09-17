@@ -5,14 +5,13 @@ const {registerUser} = require("../controllers/authController")
 const {loginUser} = require("../controllers/authController")
 const isLoggedIn = require("../middelwares/isLoggedIn")
 
-router.get("/",(req,res)=>
-    {
-        res.render("signup")
-    })
+
 router.post("/register" , registerUser );
 
 router.get("/login",(req,res)=>{
-    res.render("login")
+    let error = req.flash("error")
+    res.render("login",{error, loggedIn:false})
+  
 })
 router.post("/login" , loginUser )
 
