@@ -1,0 +1,27 @@
+{
+  "name": "mini-ecommerce-development",
+  "mongoConfig": {
+    "note": "MongoDB URI should be provided via MONGODB_URI environment variable",
+    "requiredEnvVar": "MONGODB_URI",
+    "example": "mongodb://localhost:27017/mini-ecommerce"
+  },
+  "jwtConfig": {
+    "note": "JWT secret should be provided via JWT_SECRET environment variable",
+    "requiredEnvVar": "JWT_SECRET",
+    "example": "your-super-secret-jwt-key"
+  },
+  "sessionConfig": {
+    "note": "Express session secret should be provided via EXPRESS_SESSION environment variable", 
+    "requiredEnvVar": "EXPRESS_SESSION",
+    "example": "your-express-session-secret"
+  },
+  "security": {
+    "warning": "NEVER commit actual credentials to version control",
+    "instructions": [
+      "1. Copy this file to development.json (already in .gitignore)",
+      "2. Set environment variables instead of hardcoding values",
+      "3. Use .env file for local development (also in .gitignore)",
+      "4. Use platform environment variables for production"
+    ]
+  }
+}
