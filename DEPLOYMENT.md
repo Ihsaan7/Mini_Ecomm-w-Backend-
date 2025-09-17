@@ -4,18 +4,20 @@
 
 When deploying to Vercel, you need to set the following environment variables in your Vercel dashboard:
 
+⚠️ **Security Note**: Never commit sensitive credentials to your repository. Always use environment variables for sensitive data like database connections, API keys, and secrets.
+
 ### Required Environment Variables:
 
 1. **JWT_SECRET**
-   - Value: `a9f3c4e1b6d2f8a7c3e9d1f4a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4b5`
+   - Value: `[Your JWT Secret Key - Generate a secure random string]`
    - Description: Secret key for JWT token generation
 
 2. **EXPRESS_SESSION**
-   - Value: `3bdb60e19918babe8708cd1c495b3714242f19113f5f183d12bfc078cf954282`
+   - Value: `[Your Express Session Secret - Generate a secure random string]`
    - Description: Secret key for Express session management
 
 3. **MONGODB_URI**
-   - Value: `mongodb+srv://Test:CUHSb1Q37L0Na1JP@cluster0.ip1tc2f.mongodb.net/miniEcom?retryWrites=true&w=majority&appName=Cluster0`
+   - Value: `[Your MongoDB Connection String]`
    - Description: MongoDB connection string
 
 4. **NODE_ENV**
@@ -34,8 +36,14 @@ When deploying to Vercel, you need to set the following environment variables in
 4. Deploy the application
 
 ## Default Owner Credentials:
+⚠️ **Security Warning**: Change these default credentials immediately after deployment!
 - Email: OwnerAdmin@gmail.com
 - Password: 123456
+
+**Important**: After your first login, please:
+1. Change the default password to a strong, unique password
+2. Consider implementing two-factor authentication
+3. Use a different email address for production environments
 
 ## Features Tested:
 - ✅ User registration and login
