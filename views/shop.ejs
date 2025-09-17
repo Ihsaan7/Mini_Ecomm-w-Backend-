@@ -1,68 +1,142 @@
 <%- include('./partials/header') %>
 
-    <% if(success.length>0){ %>
-        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
-            <span class="inline-block mt-1 mb-1 text-white">
-                <%= success %>
-            </span>
-        </div>
-        <% } %>
-            <div class="w-full h-screen flex items-start px-20 py-20">
-                <div class="w-[25%] flex h-screen flex-col items-start">
-                    <div class="flex items-center gap-2">
-                        <h3>sort by</h3>
-                        <form action="/shop">
-                            <select class="border-[1px] px-2 py-1" name="sortby" id="">
-                                <option value="popular">Popular</option>
-                                <option value="newest">Newest</option>
-                            </select>
-                        </form>
-                    </div>
-                    <div class="flex flex-col mt-20">
-                        <a class="block w-fit mb-2" href="">New Collection</a>
-                        <a class="block w-fit mb-2" href="">All Products</a>
-                        <a class="block w-fit mb-2" href="">Discounted Products</a>
-                    </div>
-                    <div class="mt-32">
-                        <a class="block w-fit mb-2" href="">Filter by :</a>
-                        <a class="block w-fit mb-2" href="">Availability</a>
-                        <a class="block w-fit mb-2" href="">Discount</a>
-                    </div>
-                </div>
-                <div class="w-[75%] flex flex-col gap-5 h-screen">
-                    <div class="flex flex-wrap gap-5">
-                        <% productData.forEach(function(product){ %>
-                            <div class="w-[calc(25%-1.25rem)]">
-                                <div class="w-full h-52 flex items-center justify-center bg-[<%= product.bgColor %>]">
-                                    <!-- Display Image with Fallback if Base64 is Missing or Invalid -->
-                                    <% if (product.image) { %>
-                                        <img src="data:image/jpeg;base64,<%= product.image.toString(" base64")%>"
-                                        alt="<%= product.name %>"
-                                            class="h-48 w-full object-cover"
-                                            />
-                                            <% } else { %>
-                                                <img class="w-full h-full object-fit" src="/path/to/default-image.jpg"
-                                                    alt="Product Image">
-                                                <% } %>
-                                </div>
+<!-- Success Message -->
+<% if(success.length>0){ %>
+  <div class="fixed top-20 right-4 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      <%= success %>
+    </div>
+  </div>
+<% } %>
 
-                                <div
-                                    class="flex justify-between bg-[<%= product.panelColor %>] items-center px-4 py-4 text-[<%= product.textColor %>]">
-                                    <div>
-                                        <h3>
-                                            <%= product.name %>
-                                        </h3>
-                                        <h4>₹ <%= product.price %>
-                                        </h4>
-                                    </div>
-                                    <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white"
-                                        href="/addCart/<%= product._id %>">
-                                        <i class="ri-add-line"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <% }) %>
-                    </div>
-                </div>
+<div class="min-h-screen bg-gray-50 pt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Page Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Shop</h1>
+      <p class="text-gray-600">Discover our amazing collection of products</p>
+    </div>
+
+    <div class="flex flex-col lg:flex-row gap-8">
+      
+      <!-- Sidebar Filters -->
+      <div class="lg:w-64 flex-shrink-0">
+        <div class="bg-white text-sm shadow-sm border border-gray-200 p-6">
+          
+          <!-- Sort Section -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Sort by</h3>
+            <form action="/shop">
+              <select class="w-full px-3 py-2 border border-gray-300  focus:outline-none " name="sortby">
+                <option value="popular">Popular</option>
+                <option value="newest">Newest</option>
+              </select>
+            </form>
+          </div>
+          
+          <!-- Categories Section -->
+          <div class="mb-8">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Categories</h3>
+            <div class="space-y-3">
+              <a href="#" class="block text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-3 py-2 rounded transition-colors">New Collection</a>
+              <a href="#" class="block text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-3 py-2 rounded transition-colors">All Products</a>
+              <a href="#" class="block text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-3 py-2 rounded transition-colors">Discounted Products</a>
             </div>
-            <%- include('./partials/footer') %>
+          </div>
+          
+          <!-- Filters Section -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-4">Filters</h3>
+            <div class="space-y-3">
+              <a href="#" class="block text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-3 py-2 rounded transition-colors">In Stock</a>
+              <a href="#" class="block text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-3 py-2 rounded transition-colors">On Sale</a>
+              <a href="#" class="block text-gray-700 hover:text-gray-900 hover:bg-gray-50 px-3 py-2 rounded transition-colors">Free Shipping</a>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <!-- Products Grid -->
+      <div class="flex-1">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <% productData.forEach(function(product){ %>
+            <div class="shadow-sm border border-gray-200 overflow-hidden hover:shadow-md transition-shadow group">
+              
+              <!-- Product Image -->
+              <div class="aspect-square bg-gray-50 overflow-hidden">
+                <% if (product.image) { %>
+                  <img 
+                    src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" 
+                    alt="<%= product.name %>"
+                    class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-200"
+                  >
+                <% } else { %>
+                  <div class="w-full h-full flex items-center justify-center bg-[<%= product.bgColor %>]">
+                    <div class="w-16 h-16 rounded-lg bg-[<%= product.textColor %>]">
+                    </div>
+                  </div>
+                <% } %>
+              </div>
+              
+              <!-- Product Details -->
+              <div class="p-4 bg-[<%= product.panelColor%>]">
+                <h3 class="font-semibold text-gray-900 text-sm mb-1 truncate">
+                  <%= product.name %>
+                </h3>
+                <div class="flex items-center justify-between">
+                  <p class="text-lg font-bold text-gray-900">
+                    ₹<%= product.price %>
+                  </p>
+                  <a 
+                    href="/addCart/<%= product._id %>" 
+                    class="w-8 h-8 bg-gray-900 hover:bg-gray-800 text-white rounded-full flex items-center justify-center transition-colors group"
+                    title="Add to cart"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                  </a>
+                </div>
+              </div>
+              
+            </div>
+          <% }) %>
+        </div>
+        
+        <!-- Empty State -->
+        <% if (productData.length === 0) { %>
+          <div class="text-center py-12">
+            <svg class="w-16 h-16 mx-auto text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+            </svg>
+            <h3 class="text-lg font-medium text-gray-900 mb-1">No products found</h3>
+            <p class="text-gray-500">Check back later for new products!</p>
+          </div>
+        <% } %>
+        
+      </div>
+      
+    </div>
+  </div>
+</div>
+            </div>
+<% if(success.length>0){ %>
+  <script>
+    // Auto-hide success message after 5 seconds
+    setTimeout(() => {
+      const successMsg = document.querySelector('.fixed.top-20.right-4');
+      if (successMsg) {
+        successMsg.style.transform = 'translateX(100%)';
+        successMsg.style.opacity = '0';
+        successMsg.style.transition = 'all 0.3s ease';
+        setTimeout(() => successMsg.remove(), 300);
+      }
+    }, 5000);
+  </script>
+<% } %>
+
+<%- include('./partials/footer') %>

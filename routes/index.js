@@ -41,4 +41,17 @@ router.get("/addCart/:prodId",isLoggedIn, async(req,res)=>
         res.redirect("/shop")
     })
 
+router.post("/removeCart/:prodId",isLoggedIn, async(req,res)=>
+    {   
+        try {
+            let user = await userModel.findOne({email:req.user.email})
+            user.cart = user.cart.filter(item => item.toString() !== req.params.prodId)
+            await user.save()
+            
+            res.json({ success: true, message: "Item removed from cart" })
+        } catch (error) {
+            res.status(500).json({ success: false, message: "Error removing item" })
+        }
+    })
+
 module.exports = router
