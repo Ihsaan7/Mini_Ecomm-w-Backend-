@@ -59,9 +59,9 @@
         <h3 class="font-medium"><%= product.name %></h3>
         <p class="text-sm">Rs. <%= product.price %></p>
       </div>
-      <button class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
+      <a href="/addCard/<%= product._id%>" class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
         +
-      </button>
+      </a>
     </div>
   </div>
 <% }) %>
