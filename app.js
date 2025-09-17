@@ -16,13 +16,8 @@ const expSession = require("express-session")
 const flash = require("connect-flash")
 
 
-const db = require("./config/dbConfig")
+const { connectDB, connection } = require("./config/dbConfig")
 const { createDefaultOwner } = require("./controllers/ownerAuthController")
-
-// Create default owner account
-db.once('open', () => {
-    createDefaultOwner()
-})
 
 // Debug logging middleware
 app.use((req, res, next) => {
@@ -54,6 +49,25 @@ app.use("/products" , productRouter)
 
 const PORT = process.env.PORT || 8000
 
-app.listen(PORT, () => {
-    debug(`Server started on port ${PORT}`)
-})
+// Start server only after database connection is established
+const startServer = async () => {
+    try {
+        // Connect to database first
+        await connectDB();
+        debug("Database connected successfully");
+        
+        // Create default owner account after connection is established
+        await createDefaultOwner();
+        
+        // Start the server
+        app.listen(PORT, () => {
+            debug(`Server started on port ${PORT}`);
+        });
+    } catch (error) {
+        debug("Failed to start server:", error);
+        process.exit(1);
+    }
+};
+
+// Start the application
+startServer();

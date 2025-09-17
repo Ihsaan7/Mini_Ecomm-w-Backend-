@@ -20,10 +20,16 @@ const connectionOptions = {
   family: 4 // Use IPv4, skip trying IPv6
 };
 
-mongoose
-.connect(mongoUri, connectionOptions)
-.then(()=>{debug("Connected to MongoDB")})
-.catch((err)=>{debug("MongoDB connection error:", err)})
+// Function to connect to database
+const connectDB = async () => {
+  try {
+    await mongoose.connect(mongoUri, connectionOptions);
+    debug("Connected to MongoDB successfully");
+    return mongoose.connection;
+  } catch (err) {
+    debug("MongoDB connection error:", err);
+    throw err;
+  }
+};
 
-
-module.exports = mongoose.connection
+module.exports = { connectDB, connection: mongoose.connection }
