@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Scatch</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            'inter': ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="font-inter bg-gray-50 min-h-screen">
+  <!-- Header -->
+  <% if (flash && flash.length > 0) { %>
+  <div class="flash-message fixed top-10 left-1/2 transform -translate-x-1/2 z-50 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+      </svg>
+      <%= flash[0] %>
+    </div>
+  </div>
+<% } %>
+  
+  <nav class="w-full flex justify-between fixed top-0 left-0 px-5 py-3 bg-white shadow-sm z-50">
+    <h3 class="text-xl font-semibold text-gray-800">Scatch Admin</h3>
+    <div class="flex gap-5 items-center">
+      <a href="/owners/logout" class="text-red-600 hover:text-red-700 transition-colors">
+        <i class="ri-logout-box-line mr-1"></i>Logout
+      </a>
+    </div>
+  </nav>
+
+  <div class="flex pt-10">
+    <!-- Sidebar -->
+    <div class="w-64  min-h-screen shadow-sm border-r">
+      <div class="p-6">
+        <h4 class="text-lg font-semibold text-gray-800 mb-4">Admin Panel</h4>
+        <nav class="space-y-3 pt-10">
+          <a href="/owners/products" class="flex items-center text-gray-600 hover:text-blue-600 hover:bg-blue-50 px-3 py-2 rounded-md transition-colors">
+            <i class="ri-shopping-bag-line mr-2"></i>All Products
+          </a>
+          <a href="/owners" class="flex items-center text-blue-600 bg-blue-50 px-3 py-2 rounded-md font-medium">
+            <i class="ri-add-circle-line mr-2"></i>Create New Product
+          </a>
+        </nav>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="flex-1 p-8">
+      <h2 class="text-2xl font-semibold text-gray-800 mb-8">Create New Product</h2>
+      
+      <form action="/products/create" method="POST" enctype="multipart/form-data" class="space-y-8">
+        <!-- Product Details Section -->
+        <div class=" p-6 shadow-md">
+          <h3 class="text-lg font-medium text-gray-800 mb-6">Product Details</h3>
+          
+          <!-- Product Image -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Product Image</label>
+            <div class="flex items-center space-x-4">
+              <label for="image" class="bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 transition cursor-pointer">
+                Select File
+              </label>
+              <input 
+                type="file" 
+                name="image" 
+                id="image" 
+                accept="image/*" 
+                class="hidden"
+              />
+              <span class="text-gray-500 text-sm">📷</span>
+            </div>
+          </div>
+
+          <!-- Product Name and Price Row -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="md:col-span-1">
+              <input 
+                type="text" 
+                name="name"
+                placeholder="Product Name" 
+                class="w-full px-3 py-2 bg-gray-100 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <input 
+                type="number" 
+                name="price"
+                placeholder="Product Price" 
+                class="w-full px-3 py-2 bg-gray-100 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <input 
+                type="number" 
+                name="discount"
+                placeholder="Discount Price" 
+                class="w-full px-3 py-2 bg-gray-100 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- Panel Details Section -->
+        <div class=" -lg p-6 shadow-lg">
+          <h3 class="text-lg font-medium text-gray-800 mb-6">Panel Details</h3>
+          
+          <!-- Color Options Row -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div>
+              <input 
+                type="text" 
+                name="bgColor"
+                placeholder="Background Color" 
+                class="w-full px-3 py-2 bg-gray-100 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <input 
+                type="text" 
+                name="panelColor"
+                placeholder="Panel Color" 
+                class="w-full px-3 py-2 bg-gray-100 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <input 
+                type="text" 
+                name="textColor"
+                placeholder="Text Color" 
+                class="w-full px-3 py-2 bg-gray-100 border border-gray-300  focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <!-- Suggested Light Colors -->
+          <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+            <div class="flex items-center mb-3">
+              <svg class="w-4 h-4 mr-2 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"></path>
+              </svg>
+              <h4 class="text-sm font-medium text-gray-700">Light Colors</h4>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs mb-6">
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #FEF3C7;"></div>
+                <span class="text-gray-600">Soft Yellow</span>
+                <code class="text-gray-500 font-mono">#FEF3C7</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #DBEAFE;"></div>
+                <span class="text-gray-600">Light Blue</span>
+                <code class="text-gray-500 font-mono">#DBEAFE</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #ECFDF5;"></div>
+                <span class="text-gray-600">Mint Green</span>
+                <code class="text-gray-500 font-mono">#ECFDF5</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #FDF2F8;"></div>
+                <span class="text-gray-600">Soft Pink</span>
+                <code class="text-gray-500 font-mono">#FDF2F8</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #F3E8FF;"></div>
+                <span class="text-gray-600">Lavender</span>
+                <code class="text-gray-500 font-mono">#F3E8FF</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #FEF7FF;"></div>
+                <span class="text-gray-600">Pale Purple</span>
+                <code class="text-gray-500 font-mono">#FEF7FF</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #FFFBEB;"></div>
+                <span class="text-gray-600">Cream</span>
+                <code class="text-gray-500 font-mono">#FFFBEB</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #F0FDF4;"></div>
+                <span class="text-gray-600">Light Green</span>
+                <code class="text-gray-500 font-mono">#F0FDF4</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #FFF7ED;"></div>
+                <span class="text-gray-600">Peach</span>
+                <code class="text-gray-500 font-mono">#FFF7ED</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #F0F9FF;"></div>
+                <span class="text-gray-600">Sky Blue</span>
+                <code class="text-gray-500 font-mono">#F0F9FF</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #FEFCE8;"></div>
+                <span class="text-gray-600">Lime</span>
+                <code class="text-gray-500 font-mono">#FEFCE8</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #F8FAFC;"></div>
+                <span class="text-gray-600">Light Gray</span>
+                <code class="text-gray-500 font-mono">#F8FAFC</code>
+              </div>
+            </div>
+
+            <!-- Dark Colors Section -->
+            <div class="flex items-center mb-3">
+              <svg class="w-4 h-4 mr-2 text-gray-600" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M21.64,13a1,1,0,0,0-1.05-.14,8.05,8.05,0,0,1-3.37.73A8.15,8.15,0,0,1,9.08,5.49a8.59,8.59,0,0,1,.25-2A1,1,0,0,0,8,2.36,10.14,10.14,0,1,0,22,14.05,1,1,0,0,0,21.64,13Zm-9.5,6.69A8.14,8.14,0,0,1,7.08,5.22v.27A10.15,10.15,0,0,0,17.22,15.63a9.79,9.79,0,0,0,2.1-.22A8.11,8.11,0,0,1,12.14,19.73Z"/>
+              </svg>
+              <h4 class="text-sm font-medium text-gray-700">Dark Colors</h4>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #1F2937;"></div>
+                <span class="text-gray-600">Dark Gray</span>
+                <code class="text-gray-500 font-mono">#1F2937</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #1E40AF;"></div>
+                <span class="text-gray-600">Navy Blue</span>
+                <code class="text-gray-500 font-mono">#1E40AF</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #166534;"></div>
+                <span class="text-gray-600">Forest Green</span>
+                <code class="text-gray-500 font-mono">#166534</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #BE123C;"></div>
+                <span class="text-gray-600">Deep Red</span>
+                <code class="text-gray-500 font-mono">#BE123C</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #7C2D12;"></div>
+                <span class="text-gray-600">Dark Orange</span>
+                <code class="text-gray-500 font-mono">#7C2D12</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #581C87;"></div>
+                <span class="text-gray-600">Deep Purple</span>
+                <code class="text-gray-500 font-mono">#581C87</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #0F172A;"></div>
+                <span class="text-gray-600">Midnight</span>
+                <code class="text-gray-500 font-mono">#0F172A</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #134E4A;"></div>
+                <span class="text-gray-600">Teal Dark</span>
+                <code class="text-gray-500 font-mono">#134E4A</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #92400E;"></div>
+                <span class="text-gray-600">Dark Amber</span>
+                <code class="text-gray-500 font-mono">#92400E</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #1E1B4B;"></div>
+                <span class="text-gray-600">Dark Indigo</span>
+                <code class="text-gray-500 font-mono">#1E1B4B</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #991B1B;"></div>
+                <span class="text-gray-600">Crimson</span>
+                <code class="text-gray-500 font-mono">#991B1B</code>
+              </div>
+              <div class="flex items-center space-x-2 p-2 bg-white rounded border hover:shadow-sm transition-shadow cursor-pointer">
+                <div class="w-4 h-4 rounded" style="background-color: #374151;"></div>
+                <span class="text-gray-600">Charcoal</span>
+                <code class="text-gray-500 font-mono">#374151</code>
+              </div>
+            </div>
+            <p class="text-xs text-gray-500 mt-3 flex items-center">
+              <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+              Click on any hex code to copy it to your clipboard
+            </p>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-end">
+          <button 
+            type="submit" 
+            class="bg-blue-500 text-white px-6 py-2  hover:bg-blue-600 transition font-medium"
+          >
+            Create Product
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Auto-fade flash messages
+    document.addEventListener('DOMContentLoaded', function() {
+      const flashMessages = document.querySelectorAll('.flash-message');
+      flashMessages.forEach(function(message) {
+        setTimeout(function() {
+          message.style.transition = 'opacity 0.5s ease-out';
+          message.style.opacity = '0';
+          setTimeout(function() {
+            message.remove();
+          }, 500);
+        }, 3000); // Fade after 3 seconds
+      });
+
+      // Copy hex codes to clipboard
+      const hexCodes = document.querySelectorAll('code');
+      hexCodes.forEach(function(code) {
+        code.style.cursor = 'pointer';
+        code.addEventListener('click', function() {
+          const hexValue = this.textContent;
+          navigator.clipboard.writeText(hexValue).then(function() {
+            // Show temporary success message
+            const originalText = code.textContent;
+            code.textContent = 'Copied!';
+            code.style.color = '#10B981';
+            setTimeout(function() {
+              code.textContent = originalText;
+              code.style.color = '';
+            }, 1000);
+          }).catch(function() {
+            // Fallback for older browsers
+            const textArea = document.createElement('textarea');
+            textArea.value = hexValue;
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            
+            const originalText = code.textContent;
+            code.textContent = 'Copied!';
+            code.style.color = '#10B981';
+            setTimeout(function() {
+              code.textContent = originalText;
+              code.style.color = '';
+            }, 1000);
+          });
+        });
+      });
+    });
+  </script>
+</body>
+</html>
