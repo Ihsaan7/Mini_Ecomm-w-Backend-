@@ -3,9 +3,10 @@ const debug = require("debug")("mini-ecommerce:product")
 const router = express.Router()
 const upload = require("../config/multerConfig")
 const productModel = require("../models/product")
+const isOwner = require("../middelwares/isOwner")
 
 
-router.post("/create", upload.single("image") ,async (req,res)=>
+router.post("/create", isOwner, upload.single("image") ,async (req,res)=>
     {
         
      try{   const {name , price  , discount , bgColor , panelColor,textColor} = req.body

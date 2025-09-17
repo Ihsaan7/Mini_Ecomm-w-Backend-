@@ -1,0 +1,251 @@
+<%- include('./partials/header') %>
+
+<div class="bg-gray-100 min-h-screen pt-20">
+  <div class="max-w-4xl mx-auto px-4 py-8">
+    <% if (user.cart && user.cart.length > 0) { %>
+      <div class="space-y-6">
+        <% user.cart.forEach(function(product, index) { %>
+          <!-- Individual Cart Item Card -->
+          <div class="bg-white rounded-2xl shadow-lg overflow-hidden max-w-2xl mx-auto">
+            <div class="flex flex-col md:flex-row">
+              <!-- Left Side: Product Image, Name, Quantity Controls, and Net Total -->
+              <div class="w-full md:w-1/2 p-6 md:p-8 bg-gray-50">
+                <!-- Product Image - Much Larger -->
+                <div class="w-full h-48 md:h-64 mb-6 rounded-xl overflow-hidden bg-white shadow-sm">
+                  <% if (product.image) { %>
+                    <img class="w-full h-full object-contain p-4" 
+                         src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" 
+                         alt="<%= product.name %>">
+                  <% } else { %>
+                    <div class="w-full h-full flex items-center justify-center">
+                      <div class="w-32 h-32 rounded-xl" 
+                           style="background-color: <%= product.bgColor || '#e5e7eb' %>;">
+                      </div>
+                    </div>
+                  <% } %>
+                </div>
+
+                <!-- Product Name -->
+                <h3 class="text-xl font-semibold text-gray-800 mb-6 text-center">
+                  <%= product.name %>
+                </h3>
+                
+                <!-- Quantity Controls -->
+                <div class="flex items-center justify-center space-x-6 mb-8">
+                  <button class="w-12 h-12 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors" 
+                          onclick="decreaseQuantity(<%= index %>)" data-price="<%= product.price %>">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
+                    </svg>
+                  </button>
+                  <span class="text-2xl font-bold min-w-[4rem] text-center text-gray-800" 
+                        id="quantity-<%= index %>" data-price="<%= product.price %>">01</span>
+                  <button class="w-12 h-12 rounded-full bg-gray-800 hover:bg-gray-700 flex items-center justify-center transition-colors" 
+                          onclick="increaseQuantity(<%= index %>)" data-price="<%= product.price %>">
+                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <!-- Net Total for this item -->
+                <div class="bg-gray-700 text-white p-4 rounded-xl">
+                  <div class="flex justify-between items-center">
+                    <span class="text-base font-medium">Net Total</span>
+                    <span class="text-xl font-bold" id="item-total-<%= index %>">₹<%= product.price %></span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Right Side: Price Breakdown -->
+              <div class="w-full md:w-1/2 p-6 md:p-8">
+                <h4 class="text-xl font-semibold text-gray-800 mb-6">Price Breakdown</h4>
+                
+                <div class="space-y-4 mb-6">
+                  <!-- Total MRP -->
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Total MRP</span>
+                    <span class="font-semibold text-gray-800">₹<%= product.price %></span>
+                  </div>
+                  
+                  <!-- Discount on MRP -->
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Discount on MRP</span>
+                    <span class="font-semibold text-gray-800">₹ 0</span>
+                  </div>
+                  
+                  <!-- Platform Fee -->
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Platform Fee</span>
+                    <span class="font-semibold text-gray-800">₹ 20</span>
+                  </div>
+                  
+                  <!-- Shipping Fee -->
+                  <div class="flex justify-between items-center">
+                    <span class="text-gray-600">Shipping Fee</span>
+                    <span class="font-semibold text-green-600">FREE</span>
+                  </div>
+                  
+                  <div class="border-t-2 border-gray-200 my-4"></div>
+                  
+                  <!-- Total Amount -->
+                  <div class="flex justify-between items-center">
+                    <span class="text-lg font-semibold text-gray-800">Total Amount</span>
+                    <span class="text-xl font-bold text-green-600" id="product-total-<%= index %>">₹<%= parseInt(product.price) + 20 %></span>
+                  </div>
+                </div>
+
+                <!-- Remove Button -->
+                <button class="w-full mt-6 text-red-500 hover:text-red-700 hover:bg-red-50 transition-colors text-sm font-medium py-2 px-4 rounded-lg border border-red-200" 
+                        onclick="removeItem(<%= index %>)">
+                  <svg class="w-4 h-4 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                  Remove Item
+                </button>
+              </div>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } else { %>
+      <!-- Empty Cart State -->
+      <div class="bg-white rounded-2xl shadow-lg p-16 text-center max-w-lg mx-auto">
+        <div class="w-32 h-32 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
+          <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-semibold text-gray-900 mb-3">Your cart is empty</h3>
+        <p class="text-gray-500 mb-8 text-lg">Add some amazing products to get started</p>
+        <a href="/shop" class="inline-flex items-center px-8 py-4 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition-colors font-semibold">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+          </svg>
+          Continue Shopping
+        </a>
+      </div>
+    <% } %>
+
+    <!-- Global Actions for Cart -->
+    <% if (user.cart && user.cart.length > 0) { %>
+      <div class="max-w-2xl mx-auto mt-8">
+        <div class="bg-white rounded-2xl shadow-lg p-8">
+          <div class="flex flex-col sm:flex-row gap-4">
+            <button class="flex-1 bg-gray-900 text-white py-4 px-6 rounded-xl font-semibold hover:bg-gray-800 transition-colors text-lg">
+              Proceed to Checkout
+            </button>
+            <a href="/shop" class="flex-1 bg-gray-100 text-gray-800 py-4 px-6 rounded-xl font-semibold hover:bg-gray-200 transition-colors text-center text-lg">
+              Continue Shopping
+            </a>
+          </div>
+          
+          <!-- Security Badge -->
+          <div class="mt-6 flex items-center justify-center text-sm text-gray-500">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+            </svg>
+            🔒 Secure Checkout - Your data is protected
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</div>
+
+<!-- JavaScript for Cart Functionality -->
+<script>
+  function increaseQuantity(index) {
+    const quantityElement = document.getElementById(`quantity-${index}`);
+    const itemTotalElement = document.getElementById(`item-total-${index}`);
+    const productTotalElement = document.getElementById(`product-total-${index}`);
+    const price = parseFloat(quantityElement.dataset.price);
+    
+    let currentQuantity = parseInt(quantityElement.textContent);
+    currentQuantity++;
+    quantityElement.textContent = currentQuantity.toString().padStart(2, '0');
+    
+    const newItemTotal = price * currentQuantity;
+    const newProductTotal = newItemTotal + 20; // Adding platform fee
+    
+    itemTotalElement.textContent = `₹${newItemTotal}`;
+    productTotalElement.textContent = `₹${newProductTotal}`;
+    
+    // Add subtle animation
+    itemTotalElement.style.transform = 'scale(1.1)';
+    setTimeout(() => {
+      itemTotalElement.style.transform = 'scale(1)';
+    }, 200);
+  }
+
+  function decreaseQuantity(index) {
+    const quantityElement = document.getElementById(`quantity-${index}`);
+    const itemTotalElement = document.getElementById(`item-total-${index}`);
+    const productTotalElement = document.getElementById(`product-total-${index}`);
+    const price = parseFloat(quantityElement.dataset.price);
+    
+    let currentQuantity = parseInt(quantityElement.textContent);
+    if (currentQuantity > 1) {
+      currentQuantity--;
+      quantityElement.textContent = currentQuantity.toString().padStart(2, '0');
+      
+      const newItemTotal = price * currentQuantity;
+      const newProductTotal = newItemTotal + 20; // Adding platform fee
+      
+      itemTotalElement.textContent = `₹${newItemTotal}`;
+      productTotalElement.textContent = `₹${newProductTotal}`;
+      
+      // Add subtle animation
+      itemTotalElement.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        itemTotalElement.style.transform = 'scale(1)';
+      }, 200);
+    }
+  }
+
+  function removeItem(index) {
+    if (confirm('Are you sure you want to remove this item from your cart?')) {
+      // In a real application, you would make an AJAX call to remove the item
+      // For now, we'll animate the removal
+      const itemElement = document.querySelector(`#quantity-${index}`).closest('.bg-white');
+      itemElement.style.transform = 'translateX(100%)';
+      itemElement.style.opacity = '0';
+      itemElement.style.transition = 'all 0.5s ease';
+      
+      setTimeout(() => {
+        itemElement.style.display = 'none';
+        checkEmptyCart();
+      }, 500);
+    }
+  }
+  
+  function checkEmptyCart() {
+    const visibleItems = document.querySelectorAll('[id^="quantity-"]').length;
+    if (visibleItems === 0) {
+      // Redirect to empty cart state or reload
+      window.location.reload();
+    }
+  }
+
+  // Add smooth transitions to quantity controls
+  document.addEventListener('DOMContentLoaded', function() {
+    // Add transition styles to total elements
+    const totalElements = document.querySelectorAll('[id^="item-total-"], [id^="product-total-"]');
+    totalElements.forEach(element => {
+      element.style.transition = 'transform 0.2s ease';
+    });
+    
+    // Add hover effects to quantity buttons
+    const quantityButtons = document.querySelectorAll('button[onclick*="Quantity"]');
+    quantityButtons.forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.05)';
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1)';
+      });
+    });
+  });
+</script>
+
+<%- include('./partials/footer') %>

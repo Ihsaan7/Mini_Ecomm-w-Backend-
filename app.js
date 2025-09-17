@@ -17,6 +17,12 @@ const flash = require("connect-flash")
 
 
 const db = require("./config/dbConfig")
+const { createDefaultOwner } = require("./controllers/ownerAuthController")
+
+// Create default owner account
+db.once('open', () => {
+    createDefaultOwner()
+})
 
 // Debug logging middleware
 app.use((req, res, next) => {

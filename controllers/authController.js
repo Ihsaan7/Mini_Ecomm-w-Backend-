@@ -27,8 +27,8 @@ module.exports.registerUser =async function (req,res)
 
 module.exports.loginUser = async function (req, res) {
   try {
-    const { username, password } = req.body;
-    const user = await userModel.findOne({ username });
+    const { email, password } = req.body;
+    const user = await userModel.findOne({ email });
 
     if (!user) return res.status(401).send("Email or Password Incorrect!");
 
@@ -37,7 +37,7 @@ module.exports.loginUser = async function (req, res) {
 
     const token = generateToken(user);
     res.cookie("token", token);
-    res.redirect("/users/shop")
+    res.redirect("/shop")
   } catch (err) {
     res.status(500).send(err.message);
   }

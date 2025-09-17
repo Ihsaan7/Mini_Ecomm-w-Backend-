@@ -15,8 +15,14 @@ router.get("/",(req,res)=>
 
 router.get("/shop",isLoggedIn, async(req,res)=>
     {
+        let success = req.flash("success")
         const productData =await productModel.find()
-        res.render("shop",{productData})
+        res.render("shop",{productData ,success})
+    })
+router.get("/cart",isLoggedIn, async(req,res)=>
+    {
+        const user =await userModel.findOne({email:req.user.email}).populate("cart")
+        res.render("cart",{user})
     })
 
 router.get("/logout",(req,res)=>
@@ -31,6 +37,8 @@ router.get("/addCart/:prodId",isLoggedIn, async(req,res)=>
         user.cart.push(req.params.prodId)
         await user.save()
 
+        req.flash("success","Added to Cart")
+        res.redirect("/shop")
     })
 
 module.exports = router
