@@ -9,7 +9,7 @@
 <body class="bg-gray-100 min-h-screen">
   <!-- Header -->
   <% if (flash && flash.length > 0) { %>
-  <div class="bg-green-100 text-green-800 px-4 py-2 rounded mb-4">
+  <div class="flash-message bg-green-100 text-green-800 px-4 py-2 rounded mb-4 mx-6 mt-4">
     <%= flash[0] %>
   </div>
 <% } %>
@@ -135,5 +135,21 @@
       </form>
     </div>
   </div>
+
+  <script>
+    // Auto-fade flash messages
+    document.addEventListener('DOMContentLoaded', function() {
+      const flashMessages = document.querySelectorAll('.flash-message');
+      flashMessages.forEach(function(message) {
+        setTimeout(function() {
+          message.style.transition = 'opacity 0.5s ease-out';
+          message.style.opacity = '0';
+          setTimeout(function() {
+            message.remove();
+          }, 500);
+        }, 3000); // Fade after 3 seconds
+      });
+    });
+  </script>
 </body>
 </html>

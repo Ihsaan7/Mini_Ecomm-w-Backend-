@@ -1,74 +1,68 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Scatch - Shop</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-200 min-h-screen">
-  <div class="flex">
-    <!-- Sidebar -->
-    <div class="w-64 bg-white p-6 min-h-screen">
-      <h1 class="text-2xl font-bold mb-8">Scatch</h1>
-      
-      <!-- Sort By -->
-      <div class="mb-8">
-        <label class="block text-sm font-medium mb-2">sort by</label>
-        <select class="w-full p-2 border border-gray-300 rounded text-sm">
-          <option>Popular</option>
-          <option>Price: Low to High</option>
-          <option>Price: High to Low</option>
-          <option>Newest</option>
-        </select>
-      </div>
+<%- include('./partials/header') %>
 
-      <!-- Categories -->
-      <div class="mb-8">
-        <ul class="space-y-3">
-          <li><a href="#" class="text-gray-700 hover:text-black">New Collection</a></li>
-          <li><a href="#" class="text-gray-700 hover:text-black">All Products</a></li>
-          <li><a href="#" class="text-gray-700 hover:text-black">Discounted Products</a></li>
-        </ul>
-      </div>
+    <% if(success.length>0){ %>
+        <div class="absolute top-5 left-1/2 -translate-x-1/2 -translate-y-1/2 p-3 rounded-md bg-blue-500">
+            <span class="inline-block mt-1 mb-1 text-white">
+                <%= success %>
+            </span>
+        </div>
+        <% } %>
+            <div class="w-full h-screen flex items-start px-20 py-20">
+                <div class="w-[25%] flex h-screen flex-col items-start">
+                    <div class="flex items-center gap-2">
+                        <h3>sort by</h3>
+                        <form action="/shop">
+                            <select class="border-[1px] px-2 py-1" name="sortby" id="">
+                                <option value="popular">Popular</option>
+                                <option value="newest">Newest</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="flex flex-col mt-20">
+                        <a class="block w-fit mb-2" href="">New Collection</a>
+                        <a class="block w-fit mb-2" href="">All Products</a>
+                        <a class="block w-fit mb-2" href="">Discounted Products</a>
+                    </div>
+                    <div class="mt-32">
+                        <a class="block w-fit mb-2" href="">Filter by :</a>
+                        <a class="block w-fit mb-2" href="">Availability</a>
+                        <a class="block w-fit mb-2" href="">Discount</a>
+                    </div>
+                </div>
+                <div class="w-[75%] flex flex-col gap-5 h-screen">
+                    <div class="flex flex-wrap gap-5">
+                        <% productData.forEach(function(product){ %>
+                            <div class="w-[calc(25%-1.25rem)]">
+                                <div class="w-full h-52 flex items-center justify-center bg-[<%= product.bgColor %>]">
+                                    <!-- Display Image with Fallback if Base64 is Missing or Invalid -->
+                                    <% if (product.image) { %>
+                                        <img src="data:image/jpeg;base64,<%= product.image.toString(" base64")%>"
+                                        alt="<%= product.name %>"
+                                            class="h-48 w-full object-cover"
+                                            />
+                                            <% } else { %>
+                                                <img class="w-full h-full object-fit" src="/path/to/default-image.jpg"
+                                                    alt="Product Image">
+                                                <% } %>
+                                </div>
 
-      <!-- Filter By -->
-      <div>
-        <h3 class="font-medium mb-4">Filter by :</h3>
-        <ul class="space-y-3">
-          <li><a href="#" class="text-gray-700 hover:text-black">Availability</a></li>
-          <li><a href="#" class="text-gray-700 hover:text-black">Discount</a></li>
-        </ul>
-      </div>
-    </div>
-
-    <!-- Main Content -->
-    <div class="flex-1 p-6">
-      <!-- Product Grid -->
-      <div class="grid grid-cols-4 gap-6">
-        <!-- Product Card 1 -->
-       <% productData.forEach(product => { %>
-  <div class="bg-white rounded-lg overflow-hidden shadow-sm">
-    <img 
-      src="data:image/jpeg;base64,<%= product.image.toString("base64")%>" 
-      alt="<%= product.name %>" 
-      class="h-48 w-full object-cover"
-    />
-    <div class="bg-[<%= product.panelColor %>] text-[<%= product.textColor%>] p-3 flex justify-between items-center">
-      <div>
-        <h3 class="font-medium"><%= product.name %></h3>
-        <p class="text-sm">Rs. <%= product.price %></p>
-      </div>
-      <a href="/addCard/<%= product._id%>" class="w-8 h-8 bg-white text-red-400 rounded-full flex items-center justify-center font-bold hover:bg-gray-100">
-        +
-      </a>
-    </div>
-  </div>
-<% }) %>
-
-
-      </div>
-    </div>
-  </div>
-</body>
-</html>
+                                <div
+                                    class="flex justify-between bg-[<%= product.panelColor %>] items-center px-4 py-4 text-[<%= product.textColor %>]">
+                                    <div>
+                                        <h3>
+                                            <%= product.name %>
+                                        </h3>
+                                        <h4>₹ <%= product.price %>
+                                        </h4>
+                                    </div>
+                                    <a class="w-7 h-7 flex items-center justify-center rounded-full bg-white"
+                                        href="/addCart/<%= product._id %>">
+                                        <i class="ri-add-line"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <% }) %>
+                    </div>
+                </div>
+            </div>
+            <%- include('./partials/footer') %>
