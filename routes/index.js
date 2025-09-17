@@ -16,8 +16,9 @@ router.get("/",(req,res)=>
 router.get("/shop",isLoggedIn, async(req,res)=>
     {
         let success = req.flash("success")
+        let error = req.flash("error")
         const productData =await productModel.find()
-        res.render("shop",{productData ,success})
+        res.render("shop",{productData ,success, error})
     })
 router.get("/cart",isLoggedIn, async(req,res)=>
     {
@@ -33,12 +34,25 @@ router.get("/logout",(req,res)=>
 
 router.get("/addCart/:prodId",isLoggedIn, async(req,res)=>
     {   
-        let user = await userModel.findOne({email:req.user.email})
-        user.cart.push(req.params.prodId)
-        await user.save()
-
-        req.flash("success","Added to Cart")
-        res.redirect("/shop")
+        try {
+            let user = await userModel.findOne({email:req.user.email})
+            
+            // Check if product already exists in cart
+            const productExists = user.cart.some(item => item.toString() === req.params.prodId)
+            
+            if (productExists) {
+                req.flash("error", "Product already exists in your cart!")
+                res.redirect("/shop")
+            } else {
+                user.cart.push(req.params.prodId)
+                await user.save()
+                req.flash("success","Added to Cart")
+                res.redirect("/shop")
+            }
+        } catch (error) {
+            req.flash("error", "Error adding product to cart")
+            res.redirect("/shop")
+        }
     })
 
 router.post("/removeCart/:prodId",isLoggedIn, async(req,res)=>

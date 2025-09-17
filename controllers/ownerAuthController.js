@@ -47,7 +47,6 @@ module.exports.createDefaultOwner = async function () {
         // Check if default owner already exists
         const existingOwner = await ownerModel.findOne({ email: "OwnerAdmin@gmail.com" });
         if (existingOwner) {
-            console.log("Default owner already exists");
             return;
         }
 
@@ -60,8 +59,6 @@ module.exports.createDefaultOwner = async function () {
             email: "OwnerAdmin@gmail.com",
             password: hashPass
         });
-
-        console.log("Default owner created successfully");
     } catch (err) {
         console.error("Error creating default owner:", err.message);
     }

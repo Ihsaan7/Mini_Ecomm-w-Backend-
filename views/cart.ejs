@@ -9,7 +9,7 @@
           <div class="space-y-4">
             <% user.cart.forEach(function(product, index) { %>
               <!-- Individual Cart Item Card -->
-              <div class=" shadow-sm  overflow-hidden">
+              <div class=" shadow-sm  overflow-hidden" data-product-id="<%= product._id %>" data-index="<%= index %>">
                 <div class="flex p-4">
                   <!-- Product Image -->
                   <div class="flex-shrink-0 mr-4">
@@ -37,16 +37,21 @@
                     
                     <!-- Quantity Controls -->
                     <div class="flex items-center space-x-3 mb-3">
+                      <% 
+                        const finalPrice = product.discount > 0 ? 
+                          Math.round(product.price * (1 - product.discount / 100)) : 
+                          product.price;
+                      %>
                       <button class="w-8 h-8 rounded-full border border-gray-300 hover:border-gray-400 flex items-center justify-center transition-colors" 
-                              onclick="decreaseQuantity(<%= index %>)" data-price="<%= product.price %>">
+                              onclick="decreaseQuantity(<%= index %>)" data-price="<%= finalPrice %>">
                         <svg class="w-4 h-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
                         </svg>
                       </button>
                       <span class="text-lg font-semibold min-w-[2rem] text-center" 
-                            id="quantity-<%= index %>" data-price="<%= product.price %>">01</span>
+                            id="quantity-<%= index %>" data-price="<%= finalPrice %>">01</span>
                       <button class="w-8 h-8 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center transition-colors" 
-                              onclick="increaseQuantity(<%= index %>)" data-price="<%= product.price %>">
+                              onclick="increaseQuantity(<%= index %>)" data-price="<%= finalPrice %>">
                         <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                         </svg>
@@ -55,8 +60,24 @@
                     
                     <!-- Price and Actions -->
                     <div class="flex items-center justify-between">
-                      <div class="text-lg font-bold text-gray-900" id="item-total-<%= index %>">
-                        ₹<%= product.price %>
+                      <div class="flex flex-col" id="item-total-<%= index %>">
+                        <% if (product.discount > 0) { %>
+                          <!-- Discounted Price Display -->
+                          <div class="flex items-center space-x-2 mb-1">
+                            <span class="text-sm text-gray-500 line-through">Rs. <%= product.price %></span>
+                            <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded font-medium">
+                              <%= product.discount %>% OFF
+                            </span>
+                          </div>
+                          <div class="text-lg font-bold text-gray-900">
+                            Rs. <%= Math.round(product.price * (1 - product.discount / 100)) %>
+                          </div>
+                        <% } else { %>
+                          <!-- Regular Price Display -->
+                          <div class="text-lg font-bold text-gray-900">
+                            Rs. <%= product.price %>
+                          </div>
+                        <% } %>
                       </div>
                       <button class="text-red-500 hover:text-red-700 text-sm font-medium" 
                               onclick="removeItem(<%= index %>)">
@@ -78,7 +99,12 @@
               
               <% 
                 let totalMRP = 0;
-                user.cart.forEach(product => totalMRP += parseFloat(product.price));
+                user.cart.forEach(product => {
+                  const finalPrice = product.discount > 0 ? 
+                    Math.round(product.price * (1 - product.discount / 100)) : 
+                    product.price;
+                  totalMRP += parseFloat(finalPrice);
+                });
                 let discount = 0;
                 let platformFee = 20;
                 let shippingFee = totalMRP > 500 ? 0 : 40;
@@ -89,32 +115,32 @@
                 <!-- Total MRP -->
                 <div class="flex justify-between text-sm">
                   <span class="text-gray-600">Total MRP</span>
-                  <span class="text-gray-900" id="sidebar-total-mrp">₹<%= totalMRP %></span>
+                  <span class="text-gray-900" id="sidebar-total-mrp">Rs. <%= totalMRP %></span>
                 </div>
                 
                 <!-- Discount on MRP -->
                 <div class="flex justify-between text-sm">
                   <span class="text-gray-600">Discount on MRP</span>
-                  <span class="text-green-600" id="sidebar-discount">₹<%= discount %></span>
+                  <span class="text-green-600" id="sidebar-discount">Rs. <%= discount %></span>
                 </div>
                 
                 <!-- Platform Fee -->
                 <div class="flex justify-between text-sm">
                   <span class="text-gray-600">Platform Fee</span>
-                  <span class="text-gray-900" id="sidebar-platform-fee">₹<%= platformFee %></span>
+                  <span class="text-gray-900" id="sidebar-platform-fee">Rs. <%= platformFee %></span>
                 </div>
                 
                 <!-- Shipping Fee -->
                 <div class="flex justify-between text-sm">
                   <span class="text-gray-600">Shipping Fee</span>
                   <span class="<%= shippingFee === 0 ? 'text-green-600' : 'text-gray-900' %>" id="sidebar-shipping-fee">
-                    <%= shippingFee === 0 ? "FREE" : `₹${shippingFee}` %>
+                    <%= shippingFee === 0 ? "FREE" : `Rs. ${shippingFee}` %>
                   </span>
                 </div>
                 
                 <% if (shippingFee > 0) { %>
                   <div class="text-xs text-blue-600 mt-2">
-                    Add ₹<span id="free-shipping-amount"><%= 500 - totalMRP %></span> more for free shipping
+                    Add Rs. <span id="free-shipping-amount"><%= 500 - totalMRP %></span> more for free shipping
                   </div>
                 <% } %>
                 
@@ -123,7 +149,7 @@
                 <!-- Total Amount -->
                 <div class="flex justify-between items-center text-base font-semibold">
                   <span class="text-gray-900">Total Amount</span>
-                  <span class="text-green-600" id="sidebar-total-amount">₹<%= totalAmount %></span>
+                  <span class="text-green-600" id="sidebar-total-amount">Rs. <%= totalAmount %></span>
                 </div>
               </div>
               
@@ -182,7 +208,9 @@
     quantityElement.textContent = currentQuantity.toString().padStart(2, '0');
     
     const newItemTotal = price * currentQuantity;
-    itemTotalElement.textContent = `₹${newItemTotal}`;
+    // Update the price in the last div (the actual price display)
+    const priceDisplay = itemTotalElement.querySelector('div:last-child') || itemTotalElement;
+    priceDisplay.textContent = `Rs. ${newItemTotal}`;
     
     // Update sidebar totals
     updateSidebarTotals();
@@ -205,7 +233,9 @@
       quantityElement.textContent = currentQuantity.toString().padStart(2, '0');
       
       const newItemTotal = price * currentQuantity;
-      itemTotalElement.textContent = `₹${newItemTotal}`;
+      // Update the price in the last div (the actual price display)
+      const priceDisplay = itemTotalElement.querySelector('div:last-child') || itemTotalElement;
+      priceDisplay.textContent = `Rs. ${newItemTotal}`;
       
       // Update sidebar totals
       updateSidebarTotals();
@@ -224,7 +254,7 @@
     const quantityElements = document.querySelectorAll('[id^="quantity-"]');
     
     quantityElements.forEach((element) => {
-      const itemContainer = element.closest('.bg-white');
+      const itemContainer = element.closest('div[class*="shadow-sm"]');
       // Check if item is visible (not removed)
       if (itemContainer && itemContainer.style.display !== 'none' && itemContainer.style.opacity !== '0') {
         const quantity = parseInt(element.textContent);
@@ -240,8 +270,6 @@
     const shippingFee = totalMRP > 500 ? 0 : (totalMRP > 0 ? 40 : 0); // Only add shipping if there are items
     const totalAmount = totalMRP - discount + platformFee + shippingFee;
 
-    console.log('Cart totals:', { totalMRP, discount, platformFee, shippingFee, totalAmount }); // Debug log
-
     // Update sidebar display
     const totalMRPElement = document.getElementById('sidebar-total-mrp');
     const discountElement = document.getElementById('sidebar-discount');
@@ -250,17 +278,17 @@
     const totalAmountElement = document.getElementById('sidebar-total-amount');
     const freeShippingElement = document.getElementById('free-shipping-amount');
     
-    if (totalMRPElement) totalMRPElement.textContent = `₹${totalMRP}`;
-    if (discountElement) discountElement.textContent = `₹${discount}`;
-    if (platformFeeElement) platformFeeElement.textContent = `₹${platformFee}`;
-    if (totalAmountElement) totalAmountElement.textContent = `₹${totalAmount}`;
+    if (totalMRPElement) totalMRPElement.textContent = `Rs. ${totalMRP}`;
+    if (discountElement) discountElement.textContent = `Rs. ${discount}`;
+    if (platformFeeElement) platformFeeElement.textContent = `Rs. ${platformFee}`;
+    if (totalAmountElement) totalAmountElement.textContent = `Rs. ${totalAmount}`;
     
     if (shippingFeeElement) {
       if (shippingFee === 0) {
         shippingFeeElement.textContent = "FREE";
         shippingFeeElement.className = "text-green-600";
       } else {
-        shippingFeeElement.textContent = `₹${shippingFee}`;
+        shippingFeeElement.textContent = `Rs. ${shippingFee}`;
         shippingFeeElement.className = "text-gray-900";
       }
     }
@@ -274,25 +302,58 @@
   
   function removeItem(index) {
     if (confirm('Are you sure you want to remove this item from your cart?')) {
-      const itemElement = document.querySelector(`#quantity-${index}`).closest('.bg-white');
-      itemElement.style.transform = 'translateX(100%)';
-      itemElement.style.opacity = '0';
-      itemElement.style.transition = 'all 0.5s ease';
-      
+      const itemElement = document.querySelector(`#quantity-${index}`).closest('div[class*="shadow-sm"]');
+      if (itemElement) {
+        // Get the product ID from the data attribute
+        const productId = itemElement.getAttribute('data-product-id');
+        
+        // Make API call to remove from database
+        fetch(`/removeCart/${productId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Animate item removal
+            itemElement.style.transform = 'translateX(100%)';
+            itemElement.style.opacity = '0';
+            itemElement.style.transition = 'all 0.5s ease';
+            
+            setTimeout(() => {
+              itemElement.style.display = 'none';
+              updateSidebarTotals();
+              checkEmptyCart();
+            }, 500);
+          } else {
+            alert('Error removing item from cart. Please try again.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('Error removing item from cart. Please try again.');
+        });
+      }
+    }
+  }
+
+  function checkEmptyCart() {
+    const visibleItems = document.querySelectorAll('[id^="quantity-"]');
+    const hiddenItems = Array.from(visibleItems).filter(el => {
+      const container = el.closest('div[class*="shadow-sm"]');
+      return container && (container.style.display === 'none' || container.style.opacity === '0');
+    });
+    
+    if (visibleItems.length === hiddenItems.length) {
       setTimeout(() => {
-        itemElement.style.display = 'none';
-        updateSidebarTotals();
-        checkEmptyCart();
-      }, 500);
+        window.location.reload();
+      }, 1000);
     }
   }
   
-  function checkEmptyCart() {
-    const visibleItems = document.querySelectorAll('[id^="quantity-"]:not([style*="display: none"])');
-    if (visibleItems.length === 0) {
-      window.location.reload();
-    }
-  }
+
 
   // Initialize on page load
   document.addEventListener('DOMContentLoaded', function() {

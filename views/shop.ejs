@@ -12,6 +12,18 @@
   </div>
 <% } %>
 
+<!-- Error Message -->
+<% if(error.length>0){ %>
+  <div class="fixed top-20 right-4 z-50 bg-red-500 text-white px-6 py-3 rounded-lg shadow-lg">
+    <div class="flex items-center">
+      <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+      <%= error %>
+    </div>
+  </div>
+<% } %>
+
 <div class="min-h-screen bg-gray-50 pt-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     
@@ -83,14 +95,30 @@
               </div>
               
               <!-- Product Details -->
-              <div class="p-4 bg-[<%= product.panelColor%>]">
-                <h3 class="font-semibold text-gray-900 text-sm mb-1 truncate">
+              <div class="p-4 bg-[<%= product.panelColor%>] text-[<%= product.textColor%>]">
+                <h3 class="font-semibold text-[<%= product.textColor%>] text-sm mb-1 truncate">
                   <%= product.name %>
                 </h3>
                 <div class="flex items-center justify-between">
-                  <p class="text-lg font-bold text-gray-900">
-                    ₹<%= product.price %>
-                  </p>
+                  <div class="flex flex-col">
+                    <% if (product.discount > 0) { %>
+                      <!-- Discounted Price Display -->
+                      <div class="flex items-center space-x-2">
+                        <span class="text-sm text-gray-500 line-through">Rs. <%= product.price %></span>
+                        <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded font-medium">
+                          <%= product.discount %>% OFF
+                        </span>
+                      </div>
+                      <p class="text-lg font-bold text-[<%= product.textColor%>]">
+                        Rs. <%= Math.round(product.price * (1 - product.discount / 100)) %>
+                      </p>
+                    <% } else { %>
+                      <!-- Regular Price Display -->
+                      <p class="text-lg font-bold text-[<%= product.textColor%>]">
+                        Rs. <%= product.price %>
+                      </p>
+                    <% } %>
+                  </div>
                   <a 
                     href="/addCart/<%= product._id %>" 
                     class="w-8 h-8 bg-gray-900 hover:bg-gray-800 text-white rounded-full flex items-center justify-center transition-colors group"
@@ -126,15 +154,17 @@
             </div>
 <% if(success.length>0){ %>
   <script>
-    // Auto-hide success message after 5 seconds
+    // Auto-hide messages after 5 seconds
     setTimeout(() => {
-      const successMsg = document.querySelector('.fixed.top-20.right-4');
-      if (successMsg) {
-        successMsg.style.transform = 'translateX(100%)';
-        successMsg.style.opacity = '0';
-        successMsg.style.transition = 'all 0.3s ease';
-        setTimeout(() => successMsg.remove(), 300);
-      }
+      const messages = document.querySelectorAll('.fixed.top-20.right-4');
+      messages.forEach(msg => {
+        if (msg) {
+          msg.style.transform = 'translateX(100%)';
+          msg.style.opacity = '0';
+          msg.style.transition = 'all 0.3s ease';
+          setTimeout(() => msg.remove(), 300);
+        }
+      });
     }, 5000);
   </script>
 <% } %>
